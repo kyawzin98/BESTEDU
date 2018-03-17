@@ -1,4 +1,5 @@
 <?php
+ob_start();
 include "template/head.php";
 include "template/navbar.php";
 include "template/left-aside.php";
@@ -20,7 +21,7 @@ if (isset($_POST['update'])) {
         $smg .= "Can't Not Update Record";
     }
 }
-
+ob_end_flush();
 ?>
 <!-- Page wrapper  -->
 <div class="page-wrapper">

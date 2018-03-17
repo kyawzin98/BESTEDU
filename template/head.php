@@ -12,6 +12,8 @@
     <title>Project Monster</title>
     <!-- Bootstrap Core CSS -->
     <link href="assets/plugins/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!--  Sweetalert CSS  -->
+    <link href="assets/plugins/sweetalert/sweetalert.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="assets/css/style.css" rel="stylesheet">
     <!-- KZ CSS -->
@@ -19,6 +21,7 @@
 
     <!-- You can change the theme colors from here -->
     <link href="assets/css/colors/default-dark.css" id="theme" rel="stylesheet">
+
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
     <!--[if lt IE 9]>

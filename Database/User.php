@@ -1,10 +1,9 @@
 <?php
 session_start();
-
 class User
 {
     public $db;
-
+    //Connecting to Database
     public function __construct()
     {
         $this->db = new mysqli('localhost', 'root', 'root', 'kz_crud_with_l_&_r');
@@ -13,7 +12,7 @@ class User
             echo "Can not connect to Database";
         }
     }
-
+    //Register function
     public function user_register($name, $email, $phone, $role='user', $password)
     {
         $sql = "Select * From users Where name='$name' OR email='$email'";
@@ -32,7 +31,7 @@ class User
             return $result;
         }
     }
-
+    //    Login Function
     public function login($name, $password)
     {
         $sql2 = "Select * From users Where name='$name' And password='$password'";
@@ -50,7 +49,7 @@ class User
             return false;
         }
     }
-
+//    Viewing Data
     public function retrieveData($id)
     {
         $sql = "Select * From users Where id=" . $id;
@@ -87,3 +86,4 @@ class User
 
 
 }
+?>

@@ -1,20 +1,14 @@
 <?php
 ob_start();
-//if(!$_SESSION)
-//{
-//    session_start();
-//}
 include 'Database/Db.php';
 include 'Database/User.php';
 include "template/head.php";
 include "template/navbar.php";
 include "template/left-aside.php";
 
-if($_SESSION['login'] != true)
-{
+if ($_SESSION['login'] != true) {
     header('location:index.php');
 }
-print $_SESSION['id'];
 ob_end_flush();
 ?>
 <!-- Page wrapper  -->
@@ -34,9 +28,9 @@ ob_end_flush();
                 <button class="btn pull-right hidden-sm-down btn-success" data-toggle="modal" data-target="#myuser">
                     <i class="mdi mdi-plus-circle"></i> Create
                 </button>
-<!--                <a href="register.php?state=true" class="btn pull-right hidden-sm-down btn-success">-->
-<!--                    <i class="mdi mdi-plus-circle"></i> Create-->
-<!--                </a>-->
+                <!--                <a href="register.php?state=true" class="btn pull-right hidden-sm-down btn-success">-->
+                <!--                    <i class="mdi mdi-plus-circle"></i> Create-->
+                <!--                </a>-->
                 <!-- Modal -->
                 <div class="modal fade" id="myuser" tabindex="-1" role="dialog"
                      aria-hidden="true">
@@ -125,6 +119,7 @@ ob_end_flush();
             <div class="col-12">
                 <div class="card">
                     <div class="card-block">
+
                         <div class="table-responsive">
                             <table class="table table-hover text-center">
                                 <thead class="">
@@ -134,7 +129,7 @@ ob_end_flush();
                                     <th class="text-center">Email</th>
                                     <th class="text-center">Phone</th>
                                     <th class="text-center">Role</th>
-<!--                                    <th class="text-center">Password</th>-->
+                                    <th class="text-center">Password</th>
                                     <th colspan="3" class="text-center">Action</th>
                                 </tr>
                                 </thead>
@@ -145,19 +140,17 @@ ob_end_flush();
                                 $rows = $datas->num_rows;
                                 if ($rows !== 0) {
                                     foreach ($datas as $data) {
-
-
                                         ?>
                                         <tr>
-                                            <td><?php echo $data['id'];?></td>
-                                            <td><?php echo $data['name'];?></td>
-                                            <td><?php echo $data['email'];?></td>
-                                            <td><?php echo $data['phone'];?></td>
-                                            <td><?php echo $data['role'];?></td>
-<!--                                            <td>--><?php //echo $data['password'];?><!--</td>-->
+                                            <td><?php echo $data['id']; ?></td>
+                                            <td><?php echo $data['name']; ?></td>
+                                            <td><?php echo $data['email']; ?></td>
+                                            <td><?php echo $data['phone']; ?></td>
+                                            <td><?php echo $data['role']; ?></td>
+                                            <td><?php echo $data['password']; ?></td>
                                             <td class="">
                                                 <?php
-                                                if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'manager'){
+                                                if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'manager') {
                                                     ?>
                                                     <a name="view_detail" id="" class="btn btn-info d-inline-block"
                                                        href="view_detail.php?id=<?php echo $data['id']; ?>"
@@ -165,8 +158,7 @@ ob_end_flush();
                                                         <i class=" fa fa-user"></i>
                                                     </a>
                                                     <?php
-                                                }
-                                                else {
+                                                } else {
                                                     if ($data['id'] == $_SESSION['id']) {
                                                         ?>
                                                         <a name="view_detail" id="" class="btn btn-info d-inline-block"
@@ -182,25 +174,29 @@ ob_end_flush();
                                             </td>
                                             <td>
                                                 <?php
-                                                if($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'manager'):?>
+                                                if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'manager') {
+                                                    ?>
                                                     <a name="edit" id="" class="btn btn-primary d-inline-block"
-                                                       href="edit.php?id=<?php echo $data['id'];?>" role="button">
+                                                       href="edit.php?id=<?php echo $data['id']; ?>" role="button">
                                                         <i class=" fa fa-edit"></i>
                                                     </a>
                                                     <?php
-                                                    endif;
+                                                }
                                                 ?>
                                             </td>
                                             <td>
                                                 <?php
-                                                    if(@$_SESSION['role'] == 'admin'){
-                                                        ?>
-                                                        <a name="delete" id="" class="btn btn-danger d-inline-block"
-                                                           href="delete.php?id=<?php echo $data['id'];?>" role="button">
-                                                            <i class=" fa fa-trash-o"></i>
-                                                        </a>
-                                                        <?php
-                                                    }
+                                                if (@$_SESSION['role'] == 'admin') {
+                                                    ?>
+                                                    <a name="delete" id="" class="btn btn-danger d-inline-block"
+                                                       href="delete.php?id=<?php echo $data['id'];?>" role="button">
+                                                        <i class=" fa fa-trash-o"></i>
+                                                    </a>
+<!--                                                    <button name="delete" id="delete" class="btn btn-danger d-inline-block" type="button">-->
+<!--                                                        <i class=" fa fa-trash-o"></i>-->
+<!--                                                    </button>-->
+                                                    <?php
+                                                }
                                                 ?>
                                             </td>
                                         </tr>
@@ -215,6 +211,7 @@ ob_end_flush();
                 </div>
             </div>
         </div>
+
 
         <!-- ============================================================== -->
         <!-- End PAge Content -->
