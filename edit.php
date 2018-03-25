@@ -3,24 +3,23 @@ ob_start();
 include "template/head.php";
 include "template/navbar.php";
 include "template/left-aside.php";
-include "Database/User.php";
+include "Database/User2.php";
+@$permission = $_SESSION['role'];
 $id = $_GET['id'];
-@$name = $_POST['name'];
-@$email = $_POST['email'];
-@$phone = $_POST['phone_no'];
-@$role = $_POST['role'];
-@$password = $_POST['password'];
-//$user = new User();
-//$data = $user->retrieveData($id);
-//if (isset($_POST['update'])) {
-//    $smg = 'Hello There,';
-//    $res = $user->myEdit($id, $name, $email, $phone, $role, $password);
-//    if ($res) {
-//        $smg .= "Record is updated";
-//    } else {
-//        $smg .= "Can't Not Update Record";
-//    }
-//}
+$user = new User2();
+$data = $user->retrieve_data('users', $id);
+$user_data = [
+    'id' => $id,
+    'name' => @$_POST['name'],
+    'email' => @$_POST['email'],
+    'phone' => @$_POST['phone_no'],
+    'role' => @$_POST['role'],
+    'password' => @$_POST['password'],
+    'confirm_password' => @$_POST['confirm_password']
+];
+if (isset($_POST['update'])) {
+    $update = $user->edit($user_data);
+}
 ob_end_flush();
 ?>
 <!-- Page wrapper  -->
@@ -92,25 +91,35 @@ ob_end_flush();
                                             <select class="form-control" name="role">
                                                 <option selected disabled>Select Role</option>
                                                 <?php
-                                                    if($data['role'] == 'admin'):
-                                                ?>
-                                                        <option value="admin" selected>Admin</option>
-                                                        <option value="manager">Manager</option>
-                                                        <option value="user">User</option>
-
-                                                <?php elseif($data['role'] == 'manager'):
+                                                if ($data['role'] == 'admin') {
                                                     ?>
-                                                    <option value="admin" >Admin</option>
+                                                    <option value="admin" selected>Admin</option>
+                                                    <option value="manager">Manager</option>
+                                                    <option value="user">User</option>
+
+                                                    <?php
+                                                } elseif ($data['role'] == 'manager') {
+                                                    if ($data['role'] == 'admin') {
+                                                        ?>
+                                                        <option value="admin">Admin</option>
+                                                        <?php
+                                                    }
+                                                    ?>
                                                     <option value="manager" selected>Manager</option>
                                                     <option value="user">User</option>
-                                                <?php
-                                                else:
+                                                    <?php
+                                                } else {
+                                                    if ($data['role'] == 'admin') {
+                                                        ?>
+                                                        <option value="admin">Admin</option>
+                                                        <?php
+                                                    }
                                                     ?>
-                                                    <option value="admin">Admin</option>
                                                     <option value="manager">Manager</option>
                                                     <option value="user" selected>User</option>
-                                                <?php endif; ?>
-
+                                                    <?php
+                                                }
+                                                ?>
                                             </select>
                                         </div>
                                     </div>
@@ -118,7 +127,7 @@ ob_end_flush();
                                         <div class="col-xs-12">
                                             <input class="form-control" type="password" required=""
                                                    placeholder="Password"
-                                                   name="password" value="<?php echo $data['password']; ?>">
+                                                   name="password" value="">
                                         </div>
                                     </div>
                                     <div class="form-group">
@@ -144,17 +153,31 @@ ob_end_flush();
                                     </button>
                                 </div>
                             </div>
-
-
                         </form>
                     </div>
                     <?php
-                    if (isset($smg)) {
-
+                    if ($_SESSION['error']) {
+                        ?>
+                        <div class="card-block">
+                            <div class="alert alert-danger">
+                                <p><?php
+                                    echo $_SESSION['error'];
+                                    $_SESSION['error'] = "";
+                                    ?>
+                                </p>
+                            </div>
+                        </div>
+                        <?php
+                    }
+                    if ($_SESSION['success']) {
                         ?>
                         <div class="card-block">
                             <div class="alert alert-success">
-                                <p><?php echo $smg; ?></p>
+                                <p><?php
+                                    echo $_SESSION['success'];
+                                    $_SESSION['success'] = "";
+                                    ?>
+                                </p>
                             </div>
                         </div>
                         <?php

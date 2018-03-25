@@ -28,7 +28,7 @@ class User2 extends Db_connection
         }
     }
 
-    public function user_register($name, $email, $phone, $role='user', $password, $confirm_password)
+    public function user_register($name, $email, $phone, $role = 'user', $password, $confirm_password)
     {
         $password = md5($password);
         $confirm_password = md5($confirm_password);
@@ -57,8 +57,8 @@ class User2 extends Db_connection
                         $_SESSION['login'] = true;
 //                        $_SESSION['id'] = $fetch_data['id'];
 //                        $_SESSION['role'] = $fetch_data['role'];
-                        $_SESSION['id']=$this->Connection()->insert_id;
-                        $_SESSION['role']=$role;
+                        $_SESSION['id'] = $this->Connection()->insert_id;
+                        $_SESSION['role'] = $role;
                         $_SESSION['success'] = "Registered Successfully!";
                         header('location:home_page.php');
 //                        print_r($check);
@@ -75,23 +75,52 @@ class User2 extends Db_connection
         }
     }
 
-    public function retrieve_data($table,$id){
-        $sql="Select * From ".$table." Where id=".$id;
-        $data=$this->Connection()->query($sql);
-        $res=$data->fetch_assoc();
-        return $data;
+    public function retrieve_data($table, $id)
+    {
+        $sql = "Select * From " . $table . " Where id=" . $id;
+        $data = $this->Connection()->query($sql);
+        $res = $data->fetch_assoc();
+        return $res;
 //        print_r($res);
     }
 
-    public function retrieve_datas($table){
-        $sql="Select * From ".$table;
-        $datas=$this->Connection()->query($sql);
+    public function retrieve_datas($table)
+    {
+        $sql = "Select * From " . $table;
+        $datas = $this->Connection()->query($sql);
         return $datas;
 //        print_r($res);
     }
 
-    public function edit($user_data){
-
+    public function edit($user_data)
+    {
+        $id = $user_data['id'];
+        $name = $user_data['name'];
+        $email = $user_data['email'];
+        $phone = $user_data['phone'];
+        $role = $user_data['role'];
+        $password = md5($user_data['password']);
+        $confirm_password = md5($user_data['confirm_password']);
+        $url = 'edit.php?id=' . $id;
+        if (empty($name)) {
+            $_SESSION['error'] = "Enter Name";
+        } elseif (empty($email)) {
+            $_SESSION['error'] = "Enter Email";
+        } elseif (empty($phone)) {
+            $_SESSION['error'] = "Enter Phone Number";
+        } elseif (empty($role)) {
+            $_SESSION['error'] = "Enter Role";
+        } elseif (empty($password)) {
+            $_SESSION['error'] = "Enter Password";
+        } elseif (empty($confirm_password)) {
+            $_SESSION['error'] = "Confirm your Password";
+        } elseif ($password !== $confirm_password) {
+            $_SESSION['error'] = "Passwords are not Match. Try Again!";
+        } else {
+            $sql = "Update users Set name='$name',email='$email', phone='$phone',role='$role',password='$password' Where id='$id'";
+            $update = $this->Connection()->query($sql);
+            $_SESSION['success'] = "Record is Successfully Updated";
+        }
     }
 
 }
