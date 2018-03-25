@@ -18,17 +18,22 @@ class User
         $sql = "Select * From users Where name='$name' OR email='$email'";
         //checking if the username or email is available in db
         $check = $this->db->query($sql);
+        $check=
         $count_rows = $check->num_rows;
         //if the username or email is not in db then insert to the table
         $password = md5($password);
         if ($count_rows == 0) {
             $sql = "Insert Into users (name,email,phone,role,password) Values('$name','$email','$phone','$role','$password')";
-            $result = $this->db->query($sql) or die(mysqli_connect_errno() . "Data cannot inserted");
+            $result = $this->db->query($sql) or die(mysqli_connect_error(). "Data cannot inserted");
 
             $_SESSION['login'] = true;
             $_SESSION['id']=$this->db->insert_id;
             $_SESSION['role'] = $role;
             return $result;
+        }
+        else{
+            $smg="Registration Failed,  Email or Username already exits please try again";
+            return $smg;
         }
     }
     //    Login Function

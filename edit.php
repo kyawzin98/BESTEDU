@@ -10,17 +10,17 @@ $id = $_GET['id'];
 @$phone = $_POST['phone_no'];
 @$role = $_POST['role'];
 @$password = $_POST['password'];
-$user = new User();
-$data = $user->retrieveData($id);
-if (isset($_POST['update'])) {
-    $smg = 'Hello There,';
-    $res = $user->myEdit($id, $name, $email, $phone, $role, $password);
-    if ($res) {
-        $smg .= "Record is updated";
-    } else {
-        $smg .= "Can't Not Update Record";
-    }
-}
+//$user = new User();
+//$data = $user->retrieveData($id);
+//if (isset($_POST['update'])) {
+//    $smg = 'Hello There,';
+//    $res = $user->myEdit($id, $name, $email, $phone, $role, $password);
+//    if ($res) {
+//        $smg .= "Record is updated";
+//    } else {
+//        $smg .= "Can't Not Update Record";
+//    }
+//}
 ob_end_flush();
 ?>
 <!-- Page wrapper  -->

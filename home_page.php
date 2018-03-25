@@ -1,14 +1,16 @@
 <?php
 ob_start();
-include 'Database/Db.php';
-include 'Database/User.php';
+include 'Database/User2.php';
 include "template/head.php";
 include "template/navbar.php";
 include "template/left-aside.php";
 
+//@$state = $_GET['state'];
+@$permission = $_SESSION['role'];
 if ($_SESSION['login'] != true) {
     header('location:index.php');
 }
+$user2 = new User2();
 ob_end_flush();
 ?>
 <!-- Page wrapper  -->
@@ -25,12 +27,21 @@ ob_end_flush();
                 </ol>
             </div>
             <div class="col-md-6 col-4 align-self-center">
-                <button class="btn pull-right hidden-sm-down btn-success" data-toggle="modal" data-target="#myuser">
-                    <i class="mdi mdi-plus-circle"></i> Create
-                </button>
-                <!--                <a href="register.php?state=true" class="btn pull-right hidden-sm-down btn-success">-->
+                <!--                <button class="btn pull-right hidden-sm-down btn-success" data-toggle="modal" data-target="#myuser">-->
                 <!--                    <i class="mdi mdi-plus-circle"></i> Create-->
-                <!--                </a>-->
+                <!--                </button>-->
+                <?php
+                if ($_SESSION['role'] == 'admin') {
+                    ?>
+                    <button type="button" class="btn pull-right hidden-sm-down btn-success"
+                            data-toggle="modal"
+                            data-target="#myuser">
+                        <i class="mdi mdi-plus-circle"></i> Add New User
+                    </button>
+                    <?php
+                }
+                ?>
+
                 <!-- Modal -->
                 <div class="modal fade" id="myuser" tabindex="-1" role="dialog"
                      aria-hidden="true">
@@ -49,35 +60,63 @@ ob_end_flush();
                                 <div class="card card-block">
                                     <div class="row">
                                         <div class="col-sm-12 col-xs-12">
-                                            <form>
+                                            <form class="form-horizontal form-material" id="loginform" action=""
+                                                  method="post">
                                                 <div class="form-group">
-                                                    <label for="exampleInputEmail1" class="text-success">User
-                                                        Name</label>
-                                                    <input type="text" class="form-control" id="exampleInputEmail1"
-                                                           placeholder="Enter Username">
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" type="text" required=""
+                                                               placeholder="Name" name="name">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" type="email" required=""
+                                                               placeholder="Email" name="email">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group ">
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" type="text" required=""
+                                                               placeholder="Phone" name="phone_no">
+                                                    </div>
+                                                </div>
+                                                <?php
+                                                if ($_SESSION['role'] == 'admin') {
+                                                    ?>
+                                                    <div class="form-group">
+                                                        <div class="col-xs-12">
+                                                            <select class="form-control" name="role">
+                                                                <option selected disabled>Select Role</option>
+                                                                <option value="admin">Admin</option>
+                                                                <option value="manager">Manager</option>
+                                                                <option value="user">User</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                                                    <?php
+                                                }
+                                                ?>
+                                                <div class="form-group ">
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" type="password" required=""
+                                                               placeholder="Password"
+                                                               name="password">
+                                                    </div>
                                                 </div>
                                                 <div class="form-group">
-                                                    <label for="exampleInputEmail1" class="text-success">Email
-                                                        address</label>
-                                                    <input type="email" class="form-control" id="exampleInputEmail1"
-                                                           placeholder="Enter email">
+                                                    <div class="col-xs-12">
+                                                        <input class="form-control" type="password" required=""
+                                                               placeholder="Confirm Password"
+                                                               name="confirm_password">
+                                                    </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <label for="exampleInputPassword1"
-                                                           class="text-success">Password</label>
-                                                    <input type="password" class="form-control"
-                                                           id="exampleInputPassword1" placeholder="Password">
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="exampleInputPassword1"
-                                                           class="text-success">Password</label>
-                                                    <input type="password" class="form-control"
-                                                           id="exampleInputPassword1" placeholder="Confirm Password">
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="checkbox checkbox-success">
-                                                        <input id="checkbox1" type="checkbox">
-                                                        <label for="checkbox1"> Remember me </label>
+
+
+                                                <div class="form-group text-center m-t-20">
+                                                    <div class="col-xs-12">
+                                                        <button class="btn btn-success btn-lg btn-block text-uppercase waves-effect waves-light"
+                                                                type="submit" name="sign_up">Sign Up
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </form>
@@ -85,15 +124,31 @@ ob_end_flush();
                                     </div>
                                 </div>
                             </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary waves-effect waves-light m-r-10"
-                                        data-dismiss="modal">
-                                    Close
-                                </button>
-                                <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
-                                    Submit
-                                </button>
-                            </div>
+                            <?php
+                            if (isset($_POST['sign_up'])) {
+                                @$name = $_POST['name'];
+                                @$email = $_POST['email'];
+                                @$phone = $_POST['phone_no'];
+                                @$role = $_POST['role'];
+                                @$password = $_POST['password'];
+                                @$confirm_password = $_POST['confirm_password'];
+                                $reg = $user2->user_register($name, $email, $phone, $role, $password, $confirm_password);
+                            }
+                            if (isset($_SESSION['error'])) {
+                                ?>
+                                <div class="modal-footer">
+                                    <div class="alert alert-heading">
+                                        <p>
+                                            <?php
+                                            echo $_SESSION['error'];
+                                            ?>
+                                        </p>
+                                    </div>
+                                </div>
+                                <?php
+                            }
+                            ?>
+
                         </div>
                     </div>
                 </div>
@@ -119,7 +174,6 @@ ob_end_flush();
             <div class="col-12">
                 <div class="card">
                     <div class="card-block">
-
                         <div class="table-responsive">
                             <table class="table table-hover text-center">
                                 <thead class="">
@@ -127,57 +181,50 @@ ob_end_flush();
                                     <th class="text-center">ID</th>
                                     <th class="text-center">Name</th>
                                     <th class="text-center">Email</th>
-                                    <th class="text-center">Phone</th>
-                                    <th class="text-center">Role</th>
-                                    <th class="text-center">Password</th>
                                     <th colspan="3" class="text-center">Action</th>
                                 </tr>
                                 </thead>
                                 <tbody>
                                 <?php
-                                $sql = "Select * From users";
-                                $datas = $db->query($sql);
-                                $rows = $datas->num_rows;
+                                $results = $user2->retrieve_datas('users');
+                                $res = $results->fetch_assoc();
+                                $rows = $results->num_rows;
                                 if ($rows !== 0) {
-                                    foreach ($datas as $data) {
+                                    foreach ($results as $result) {
                                         ?>
                                         <tr>
-                                            <td><?php echo $data['id']; ?></td>
-                                            <td><?php echo $data['name']; ?></td>
-                                            <td><?php echo $data['email']; ?></td>
-                                            <td><?php echo $data['phone']; ?></td>
-                                            <td><?php echo $data['role']; ?></td>
-                                            <td><?php echo $data['password']; ?></td>
-                                            <td class="">
+                                            <td><?php echo $result['id']; ?></td>
+                                            <td><?php echo $result['name']; ?></td>
+                                            <td><?php echo $result['email']; ?></td>
+                                            <td>
                                                 <?php
-                                                if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'manager') {
+                                                if ($permission == 'admin' || $permission == 'manager') {
                                                     ?>
                                                     <a name="view_detail" id="" class="btn btn-info d-inline-block"
-                                                       href="view_detail.php?id=<?php echo $data['id']; ?>"
+                                                       href="view_detail.php?id=<?php echo $result['id']; ?>"
                                                        role="button">
                                                         <i class=" fa fa-user"></i>
                                                     </a>
                                                     <?php
                                                 } else {
-                                                    if ($data['id'] == $_SESSION['id']) {
+                                                    if ($result['id'] == $_SESSION['id']) {
                                                         ?>
                                                         <a name="view_detail" id="" class="btn btn-info d-inline-block"
-                                                           href="view_detail.php?id=<?php echo $data['id']; ?>"
+                                                           href="view_detail.php?id=<?php echo $result['id']; ?>"
                                                            role="button">
                                                             <i class=" fa fa-user"></i>
                                                         </a>
                                                         <?php
                                                     }
                                                 }
-
                                                 ?>
                                             </td>
                                             <td>
                                                 <?php
-                                                if ($_SESSION['role'] == 'admin' || $_SESSION['role'] == 'manager') {
+                                                if ($permission == 'admin' || $permission == 'manager') {
                                                     ?>
                                                     <a name="edit" id="" class="btn btn-primary d-inline-block"
-                                                       href="edit.php?id=<?php echo $data['id']; ?>" role="button">
+                                                       href="edit.php?id=<?php echo $result['id']; ?>" role="button">
                                                         <i class=" fa fa-edit"></i>
                                                     </a>
                                                     <?php
@@ -186,15 +233,12 @@ ob_end_flush();
                                             </td>
                                             <td>
                                                 <?php
-                                                if (@$_SESSION['role'] == 'admin') {
+                                                if ($permission == 'admin') {
                                                     ?>
                                                     <a name="delete" id="" class="btn btn-danger d-inline-block"
-                                                       href="delete.php?id=<?php echo $data['id'];?>" role="button">
+                                                       href="delete.php?id=<?php echo $result['id']; ?>" role="button">
                                                         <i class=" fa fa-trash-o"></i>
                                                     </a>
-<!--                                                    <button name="delete" id="delete" class="btn btn-danger d-inline-block" type="button">-->
-<!--                                                        <i class=" fa fa-trash-o"></i>-->
-<!--                                                    </button>-->
                                                     <?php
                                                 }
                                                 ?>
@@ -202,6 +246,8 @@ ob_end_flush();
                                         </tr>
                                         <?php
                                     }
+                                } else {
+                                    $_SESSION['error'] = "Result not Found!";
                                 }
                                 ?>
                                 </tbody>
@@ -230,6 +276,8 @@ ob_end_flush();
     <!-- ============================================================== -->
     <!-- End Container fluid  -->
     <!-- ============================================================== -->
+
     <?php
     include "template/foot.php";
     ?>
+

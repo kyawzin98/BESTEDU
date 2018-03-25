@@ -2,7 +2,7 @@
 <!-- footer -->
 <!-- ============================================================== -->
 <footer class="footer">
-    © 2017 Monster Admin by wrappixel.com
+    © 2018 Project Monster by Kyaw Zin
 </footer>
 <!-- ============================================================== -->
 <!-- End footer -->
@@ -18,23 +18,6 @@
 <!-- ============================================================== -->
 <!-- All Jquery -->
 <!-- ============================================================== -->
-<button class="delete-photo" data-photo-id="56">Delete photo</button>
-
-<script>
-    $()
-    swal({
-            title: "Are you sure?",
-            text: "Your will not be able to recover this imaginary file!",
-            type: "warning",
-            showCancelButton: true,
-            confirmButtonClass: "btn-danger",
-            confirmButtonText: "Yes, delete it!",
-            closeOnConfirm: false
-        },
-        function(){
-            swal("Deleted!", "Your imaginary file has been deleted.", "success");
-        });
-</script>
 
 <script src="assets/plugins/jquery/jquery.min.js"></script>
 <!-- Bootstrap tether Core JavaScript -->
@@ -58,7 +41,7 @@
 <!-- ============================================================== -->
 <script src="assets/plugins/styleswitcher/jQuery.style.switcher.js"></script>
 <!-- Sweetalert JS-->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js"></script>
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-sweetalert/1.0.1/sweetalert.js"></script>-->
 </body>
 
 </html>

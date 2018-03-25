@@ -1,34 +1,23 @@
 <?php
 ob_start();
 include "template/head.php";
-include 'Database/User.php';
-$user=new User();
-@$name = $_POST['name'];
-@$email = $_POST['email'];
-@$phone = $_POST['phone_no'];
-@$role = $_POST['role'];
-
-if($role == "")
-{
-    $role = 'user';
-}
-
-@$password = $_POST['password'];
-@$confirm_pass=$_POST['confirm_password'];
+include 'Database/User2.php';
 if (isset($_POST['sign_up'])){
-    if ($password==$confirm_pass){
-        $register=$user->user_register($name,$email,$phone,$role,$password);
-        if ($register){
-            header("location:home_page.php");
-        }else{
-            //Registration Failed
-            $err_smg= "Registration Failed,  Email or Username already exits please try again";
-        }
+    @$name = $_POST['name'];
+    @$email = $_POST['email'];
+    @$phone = $_POST['phone_no'];
+    @$role = $_POST['role'];
+    if($role == "")
+    {
+        $role = 'user';
     }
-
+    @$password = $_POST['password'];
+    @$confirm_password=$_POST['confirm_password'];
+    $user=new User2();
+    $register=$user->user_register($name,$email,$phone,$role,$password,$confirm_password);
 }
-
-@$state = $_GET['state'];
+@$permission=$_SESSION['role'];
+//@$state = $_GET['state'];
 ob_end_flush();
 ?>
 
@@ -49,6 +38,21 @@ ob_end_flush();
         <div class="login-register login-sidebar"
              style="background-image:url(assets/images/background/login-register.jpg);">
             <div class="login-box card">
+                <?php
+
+                if (isset($_SESSION['error'])) {
+                    ?>
+                    <div class="card-block">
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            <strong>Hello There!</strong><br> <?php echo $_SESSION['error'];?>.
+                        </div>
+                    </div>
+                    <?php
+                }
+                ?>
                 <div class="card-block">
                     <form class="form-horizontal form-material" id="loginform" action="" method="post">
                         <a href="" class="text-center db mb-3">
@@ -73,7 +77,7 @@ ob_end_flush();
                             </div>
                         </div>
                         <?php
-                        if($state == true){
+                        if($permission == 'admin'){
                             ?>
                             <div class="form-group">
                                 <div class="col-xs-12">
@@ -120,6 +124,7 @@ ob_end_flush();
                         </div>
                     </form>
                 </div>
+
             </div>
         </div>
 
